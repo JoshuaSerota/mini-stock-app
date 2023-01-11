@@ -38,7 +38,7 @@ class StockInfoBox extends React.Component<IStockProps, IStockState> {
     this.state = {
       inputSymbol: "",
       output: "",
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,9 +50,10 @@ class StockInfoBox extends React.Component<IStockProps, IStockState> {
 
   async handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const response: string = await axios.get('/api/test');
+    const res = await axios.get('/api/test');
+    console.log(res);
     this.setState({
-      output: response,
+      output: res.data,
     });
   }
 
