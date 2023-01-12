@@ -32,6 +32,11 @@ interface IStockState {
   output: string;
 }
 
+interface PriceResponse {
+  data: { price: number};
+}
+
+
 class StockInfoBox extends React.Component<IStockProps, IStockState> {
   constructor(props: IStockProps) {
     super(props);
@@ -50,11 +55,17 @@ class StockInfoBox extends React.Component<IStockProps, IStockState> {
 
   async handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const res = await axios.get('/api/test');
-    console.log(res);
-    this.setState({
-      output: res.data,
-    });
+    try {
+      const res: PriceResponse = await axios.get('/api/quote', {
+        params: { symbol: this.state.inputSymbol },
+      });
+      console.log(res);
+      this.setState({
+        output: `${this.state.inputSymbol}: $${String(res.data.price)}`,
+      });
+    } catch (error) {
+      this.setState({ output: `Error: ${error}`});
+    }
   }
 
   render() {
